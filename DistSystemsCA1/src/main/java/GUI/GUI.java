@@ -17,8 +17,8 @@ public class GUI {
 		private airQualityServiceBlockingStub blockingStub;
 		
 		private JFrame frame;
-		private JTextField textName1;
-		private JTextField textName2;
+		private JTextField textNumber1;
+	//	private JTextField textName2;
 		private JTextArea textResponse;
 		
 	// Standard method for launching JFrame
@@ -53,15 +53,15 @@ public class GUI {
 		//Combine the code from JFrame and GRPC - two frameworks
 		initialize();
 	}
-	
+	//Builds Gui and calls RPC
 	private void initialize() {
-		//build up GUI
+		//build up GUI - JFrame is outer window
 		frame = new JFrame();
 		//Title
-		frame.setTitle("Client - Service Controller");
+		frame.setTitle("Client - Air Quality Service");
 		//Set Bounds
 		frame.setBounds(100, 100, 500, 300);
-		
+		//What happens when you exit - exit on close kills program
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Box layout determines how components are lais out in panel
@@ -70,26 +70,27 @@ public class GUI {
 		frame.getContentPane().setLayout(bl);
 		
 		JPanel panel_service_1 = new JPanel();
+		//add panel to jframe
 		frame.getContentPane().add(panel_service_1);
 		
-		//flow layout
+		//flow layout - gaps
 		panel_service_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5,5));
 		
 		//create new label and add it to the panel
-		JLabel lblNewLabel_1 = new JLabel(" Name 1 ");
+		JLabel lblNewLabel_1 = new JLabel(" Please enter the Air Quality Index or your area ");
 		panel_service_1.add(lblNewLabel_1);
 		
-		//Input textox
-		textName1 = new JTextField();
-		panel_service_1.add(textName1);
+		//Input textbox - 
+		textNumber1 = new JTextField();
+		panel_service_1.add(textNumber1);
 		
 		//width of input box
-		textName1.setColumns(10);
+		textNumber1.setColumns(10);
+		//Second JText field
+	//	JLabel lblNewLabel_2 = new JLabel(" Name 2 ");
+	//	panel_service_1.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_2 = new JLabel(" Name 2 ");
-		panel_service_1.add(lblNewLabel_2);
-		
-		JButton btnSend = new JButton("Send our message to Server");
+		JButton btnSend = new JButton("Send Air Quality index to Server");
 		
 		//add action listener to button
 		btnSend.addActionListener(new ActionListener(){
@@ -97,22 +98,22 @@ public class GUI {
 			//action for action method - will happen when button clicked
 			public void actionPerformed(ActionEvent e) {
 				
-				//retrieve data from gui
-			//	String name1 = textName1.getText();
+			//retrieve data from gui
+			int num1 = Integer.parseInt(textNumber1.getText());
 			//	String name2 = textName2.getText();
 				
 				//Grpc code
-				IndexRankNumber iRNumber = IndexRankNumber.newBuilder().setIndex(200).build();
+				IndexRankNumber iRNumber = IndexRankNumber.newBuilder().setIndex(num1).build();
 				IndexRankRating response = blockingStub.getAirQualityIndex(iRNumber);
 				//print out response
-				System.out.println(response);
+				//System.out.println(response);
 				//add response into GUI
 				textResponse.append("reply: "+response);
 			}
 		});
 		panel_service_1.add(btnSend);
 		
-		textResponse = new JTextArea (3, 10);
+		textResponse = new JTextArea (3, 30);
 		textResponse .setLineWrap(true);
 		textResponse .setWrapStyleWord(true);
 		
