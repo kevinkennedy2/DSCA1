@@ -49,7 +49,7 @@ public class AirQualityServer {
 		  Stream observer watches for messages coming in and going out 
 		 */
 		@Override
-		public void getAirQualityIndex(IndexRankNumber request, StreamObserver<IndexRankRating> responseObserver) {
+		public  void getAirQualityIndex(IndexRankNumber request, StreamObserver<IndexRankRating> responseObserver) {
 
 			//Find out index that has been sent - get method is created from generated classes
 			int index = request.getIndex();

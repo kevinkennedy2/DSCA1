@@ -16,7 +16,6 @@ public class TransportPollutionServer {
 	private Server server;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		// TODO Auto-generated method stub
 
 		final TransportPollutionServer transportServer = new TransportPollutionServer();
 
@@ -31,7 +30,11 @@ public class TransportPollutionServer {
 		int port = 50052;
 		// Create new server object, specify the service and port number it will run on
 		server = ServerBuilder.forPort(port).addService(new TransportPollutionServerImpl()).build().start();
-
+		
+		//JmDns intergration
+		String service_type = "grpc.tvp.local.";
+		String service_name = "TransportPollutionServer";
+		
 		System.out.println("Transport server running on Port: " + port);
 
 		// Wait until told to terminate - continue listening
@@ -68,7 +71,7 @@ public class TransportPollutionServer {
 			response.setEmissions(distanceRail * 0.03);
 			response.setMessage("Travelling " + distanceRail + "KM by Subway will emit " + response.getEmissions() + "KG of CO2");
 			responseObserver.onNext(response.build());
-
+			
 			responseObserver.onCompleted();
 		}
 
@@ -78,11 +81,12 @@ public class TransportPollutionServer {
 		@Override
 		public StreamObserver<carMessage> carPollution(StreamObserver<carResponse> responseObserver) {
 			
-			//we create an arraylist of type double to store the numbers during the client stream
+			//we create an array list of type double to store the numbers during the client stream
 			ArrayList<Double> list = new ArrayList();
 			
 			System.out.println("Client Streaming");
-
+			
+			//return streamObserver back to library
 			return new StreamObserver<carMessage>() {
 				
 				@Override
@@ -113,7 +117,7 @@ public class TransportPollutionServer {
 					double number2 = list.get(1);
 					
 					//Calculation for working out CO2 emissions based on Distance and Consumption
-					emissions= number1/number2*2.62;
+					emissions= number1/100*number2*2.62;
 					
 					response.setEmissions(emissions);
 					
