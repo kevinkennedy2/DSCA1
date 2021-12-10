@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.DSCA";
+option java_outer_classname = "AirQualityServiceImpl";
+
+
+
+service airQualityService {
+
+	//Unary RPC - send Integer for Index and receive warning level string back
+	rpc getAirQualityIndex (IndexRankNumber) returns (IndexRankRating){}
+
+}
+
+message IndexRankNumber {
+
+	int32 index = 1;
+}
+
+message IndexRankRating{
+
+string iRRating = 1;
+}
